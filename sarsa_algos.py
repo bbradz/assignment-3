@@ -42,7 +42,6 @@ def discretize_state(state):
 
         return discrete_state + 1
 
-
 class ModelHolder(object):
     def __init__(self, game, alpha, gamma, epsilon, lambda_value):
         self.game = game
@@ -143,7 +142,7 @@ class ModelHolder(object):
             done = False
             self.etable = np.zeros((self.num_states, self.num_actions))
             while not done:
-                next_state, reward, done, info = env.step(action)     # get s' and r
+                next_state, reward, done, _ = env.step(action)     # get s' and r
                 next_state = discretize_state(next_state)  
                 next_action = self.select_action(next_state)          # get a'
           
@@ -216,7 +215,7 @@ def avg_episode_rewards(num_runs, model, game, alpha, gamma, epsilon, lambda_val
 
 avg_episode_rewards(
     num_runs=10, 
-    model="sarsa", 
+    model="sarsa",  # sarsa or sarsa-lambda
     game="CartPole-v0", # CartPole-v0 or Taxi-v3
     alpha=0.2, 
     gamma=0.95, 
