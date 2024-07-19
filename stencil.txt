@@ -1,0 +1,15 @@
+1. Q_Learning given GymEnv
+2. SARSA-Lambda given GymEnv
+
+3a. Adjust hyperparameters for training Q_learning on Cartpole-V1
+3b. Adjust hyperparameters for training SARSA-Lambda on Cartpole-V1
+    > Save training curve into folder
+
+4a. Adjust hyperparameters for training Q_learning on Taxi-V3
+4b. Adjust hyperparameters for training SARSA-Lambda on Taxi-V3 
+    > Save training curve into folder
+
+6a. Test both models on Cartpole-V1 (view both playing side by side)
+6b. Test both models on Taxi-V3 (view both playing side by side)
+
+7. Prompt of how to analyze these results
