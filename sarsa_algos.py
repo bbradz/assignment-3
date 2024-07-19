@@ -83,8 +83,6 @@ class ModelHolder(object):
             roll = np.random.random()
             if roll < self.epsilon:
                 return np.random.randint(self.num_actions)
-            
-        # Return action from [1,6] range into range of actions of environment
 
         return bestAction
 
