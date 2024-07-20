@@ -1,1 +1,5 @@
 TODO: 
+    - Analyze the performance of both models on both games. 
+    - Additionally, Analyze the meaning of the hyperparameters 
+    (alpha, gamma, epsilon, and lambda) and record how they effect the 
+    performance of your model when they're changed.

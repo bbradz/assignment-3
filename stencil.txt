@@ -1,4 +1,0 @@
-6a. Test both models on Cartpole-V1 (view both playing side by side)
-6b. Test both models on Taxi-V3 (view both playing side by side)
-
-7. Prompt of how to analyze these results
