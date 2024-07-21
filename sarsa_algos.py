@@ -5,10 +5,15 @@ from typing import Literal
 import matplotlib.pyplot as plt
 from gym.wrappers import RecordVideo
 
+
 class Learner:
     def __init__(
-        self, alpha, gamma, epsilon, lambda_value,
-        game: Literal["CartPole-v0", "Taxi-v3"] = "CartPole-v0"
+        self,
+        alpha,
+        gamma,
+        epsilon,
+        lambda_value,
+        game: Literal["CartPole-v0", "Taxi-v3"] = "CartPole-v0",
     ):
         self.game = game
         if game == "CartPole-v0":
@@ -23,9 +28,13 @@ class Learner:
         self.lambda_value = lambda_value
         self.state = 0
         self.action = 0
-        self.qtable = np.random.uniform(low=-1, high=1, size=(self.num_states, self.num_actions))
+        self.qtable = np.random.uniform(
+            low=-1, high=1, size=(self.num_states, self.num_actions)
+        )
         self.etable = np.zeros((self.num_states, self.num_actions))
-        self.policy = np.random.random_integers(self.num_actions, size=(self.num_states, 1))
+        self.policy = np.random.random_integers(
+            self.num_actions, size=(self.num_states, 1)
+        )
 
     def write(self):
         "*** saving the numpy arrays for checking ***"
@@ -48,70 +57,69 @@ class Learner:
         self.policy[state] = bestAction
         return bestAction
 
-    def learn_policy_sarsa_lambda(
-        self, env, num_episodes
-    ):
-        """ FILL IN """
+    def learn_policy_sarsa_lambda(self, env, num_episodes):
+        """FILL IN"""
 
         # rewards_each_learning_episode = []
 
         # for ### FILL IN ###
 
-            # episodic_reward = 0
-            # done = False
+        # episodic_reward = 0
+        # done = False
 
-            ### FILL IN ###
+        ### FILL IN ###
 
-            # while ### FILL IN ###
+        # while ### FILL IN ###
 
-                ### FILL IN ###
+        ### FILL IN ###
 
-                # episodic_reward += reward
-                
-                ### FILL IN ###
+        # episodic_reward += reward
 
-                # if done: break 
+        ### FILL IN ###
 
-            # rewards_each_learning_episode.append(episodic_reward)
+        # if done: break
+
+        # rewards_each_learning_episode.append(episodic_reward)
 
         # np.save(f"results/{self.game}/sarsa_lambda/qvalues", self.qtable)
         # np.save(f"results/{self.game}/sarsa_lambda/policy", self.policy)
         # return self.policy, self.qtable, rewards_each_learning_episode
 
     def learn_policy_sarsa(self, env, num_episodes):
-        """ FILL IN """
+        """FILL IN"""
 
         # rewards_each_learning_episode = []
 
         # for ### FILL IN ###
 
-            # episodic_reward = 0
-            # done = False
-            
-            # while ### FILL IN ###: 
+        # episodic_reward = 0
+        # done = False
 
-                ### FILL IN ###
+        # while ### FILL IN ###:
 
-                # episodic_reward += reward
+        ### FILL IN ###
 
-                ### FILL IN ###
+        # episodic_reward += reward
 
-                # if done:
-                #    break
+        ### FILL IN ###
 
-            # rewards_each_learning_episode.append(episodic_reward)
+        # if done:
+        #    break
+
+        # rewards_each_learning_episode.append(episodic_reward)
 
         # np.save(f"results/{self.game}/sarsa/qvalues", self.qtable)
         # np.save(f"results/{self.game}/sarsa/policy", self.policy)
         # return self.policy, self.qtable, rewards_each_learning_episode
 
+
 def discretize_state(state):
     """
     Discretizes state based on game into a single integer in the range 1-500.
-    
+
     Input:
     state (list): A list containing the state variables [cart_position, cart_velocity, pole_angle, pole_velocity].
-    
+
     Output:
     int: An integer representing the discretized state.
     """
@@ -121,10 +129,10 @@ def discretize_state(state):
 
     else:
         state_ranges = [
-            (-4.8, 4.8),   # cart_position
-            (-3.4, 3.4),   # cart_velocity
-            (-0.418, 0.418), # pole_angle
-            (-3.4, 3.4)    # pole_velocity
+            (-4.8, 4.8),  # cart_position
+            (-3.4, 3.4),  # cart_velocity
+            (-0.418, 0.418),  # pole_angle
+            (-3.4, 3.4),  # pole_velocity
         ]
 
         bin_indices = []
@@ -134,13 +142,14 @@ def discretize_state(state):
             clipped_value = np.clip(value, low, high)
             bin_index = int((clipped_value - low) / (high - low) * (bins - 1))
             bin_indices.append(bin_index)
-        
+
         discrete_state = 0
         for i, bin_index in enumerate(bin_indices):
             discrete_state *= bins_per_variable[i]
             discrete_state += bin_index
 
         return discrete_state + 1
+
 
 def plot_rewards(episode_rewards, game, algorithm):
     """
@@ -153,13 +162,16 @@ def plot_rewards(episode_rewards, game, algorithm):
     plt.savefig(f"results/{game}/{algorithm}/rewards_plot_{algorithm}.png")
     plt.close()
 
+
 def render_visualization(learned_policy, game, model):
     """
     Renders a taxi problem visualization
     Input: learned_policy: the learned policy to be used by the taxi
     """
     env = gym.make(game, render_mode="rgb_array")
-    env = RecordVideo(env, f'results/{game}/{model}', episode_trigger=lambda episode_id: True)
+    env = RecordVideo(
+        env, f"results/{game}/{model}", episode_trigger=lambda episode_id: True
+    )
     state = discretize_state(env.reset())
     env.render()
     while True:
@@ -172,7 +184,10 @@ def render_visualization(learned_policy, game, model):
         if done:
             break
 
-def avg_episode_rewards(game, algorithm, alpha, gamma, epsilon, lambda_value, num_episodes, num_runs):
+
+def avg_episode_rewards(
+    game, algorithm, alpha, gamma, epsilon, lambda_value, num_episodes, num_runs
+):
     """
     Runs the learner algorithms a number of times and averages the episodic rewards
     from all runs for each episode
@@ -190,19 +205,26 @@ def avg_episode_rewards(game, algorithm, alpha, gamma, epsilon, lambda_value, nu
         env.reset()
         learner = Learner(alpha, gamma, epsilon, lambda_value, game)
         if algorithm == "sarsa":
-            learned_policy, q_values, single_run_er = learner.learn_policy_sarsa(env, num_episodes)
+            learned_policy, q_values, single_run_er = learner.learn_policy_sarsa(
+                env, num_episodes
+            )
         elif algorithm == "sarsa_lambda":
-            learned_policy, q_values, single_run_er = learner.learn_policy_sarsa_lambda(env, num_episodes)
+            learned_policy, q_values, single_run_er = learner.learn_policy_sarsa_lambda(
+                env, num_episodes
+            )
 
-        if not episode_rewards: 
+        if not episode_rewards:
             episode_rewards = single_run_er
         else:
-            episode_rewards = [episode_rewards[i] + single_run_er[i] for i in range(len(single_run_er))]
+            episode_rewards = [
+                episode_rewards[i] + single_run_er[i] for i in range(len(single_run_er))
+            ]
 
     episode_rewards = [er / num_runs for er in episode_rewards]
     return episode_rewards, learned_policy
 
-game = "Taxi-v3" # CartPole-v0 or Taxi-v3
+
+game = "Taxi-v3"  # CartPole-v0 or Taxi-v3
 alpha = 0.2
 gamma = 0.9
 epsilon = 0.25
