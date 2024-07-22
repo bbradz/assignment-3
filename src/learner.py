@@ -1,11 +1,11 @@
-"""This module defines a class representing a learning-based SARSA(-λ) agent."""
+"""This module defines a class representing a SARSA/SARSA(λ)-based learning agent."""
 
 import numpy as np
 import gymnasium as gym
 
 
 class Learner:
-    """A learning-based agent implementing the SARSA and SARSA-λ algorithms."""
+    """A learning-based agent implementing the SARSA and SARSA(λ) algorithms."""
 
     def __init__(
         self,
@@ -17,10 +17,10 @@ class Learner:
     ):
         """Initialize the learning agent for either the Cart Pole or Taxi game.
 
-        :param      alpha       TODO: meaning?
-        :param      gamma       TODO: meaning?
-        :param      epsilon     TODO: meaning?
-        :param      lambda_     TODO: meaning?
+        :param      alpha       Learning rate during SARSA Q-value updates
+        :param      gamma       Discount factor of the MDP environment
+        :param      epsilon     Probability of taking a random action (epsilon-greedy)
+        :param      lambda_     Scalar of n-step returns during SARSA(λ)
         :param      game        Name of the game the agent will play
         """
 
@@ -38,7 +38,7 @@ class Learner:
         self.alpha = alpha
         self.gamma = gamma
         self.epsilon = epsilon
-        self.lambda_ = lambda_
+        self.lambda_ = lambda_  # Note: Python doesn't allow variables named "lambda"
 
         self.state = 0
         self.action = 0
@@ -53,7 +53,7 @@ class Learner:
         # Policy - |S| x 1 vector representing the chosen action in each state
         self.policy = self.rng.integers(self.num_actions, size=self.num_states)
 
-        # TODO: What is this called? It's |S| x |A|
+        # Eligibility trace used to accelerate SARSA learning; |S| x |A| array
         self.e_table = np.zeros((self.num_states, self.num_actions))
 
     def calculate_action(self, state: int) -> int:
@@ -77,10 +77,10 @@ class Learner:
                 best_actions.append(action)  # Save any equal-value actions
 
         best_action = self.rng.choice(best_actions)
-        self.policy[state] = best_action  # Update agent's policy
+        self.policy[state] = best_action  # Update agent's policy for this state
         return best_action
 
-    def sarsa(self, env, num_episodes):
+    def sarsa(self, env: gym.Env, num_episodes: int):
         """FILL IN"""
 
         # rewards_each_learning_episode = []
