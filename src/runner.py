@@ -16,44 +16,37 @@ class EnvRunner:
         self.env = gym.make(env_name)  # Create and store the environment
         self.agent = agent
 
-    def run_episode(self):
-        """Run a single episode using the stored environment and agent."""
-        self.env.reset()
+    def average_over_trials(self, use_lambda: bool, num_episodes: int, num_trials: int):
+        """Measure average performance over a number of multi-episode trials.
 
+        Runs the specified learning algorithm over many trials, each consisting of
+            the given number of episodes, with performance averaged for each
+            trial over all episodic rewards in the trial.
 
-def avg_episode_rewards(
-    game, algorithm, alpha, gamma, epsilon, lambda_value, num_episodes, num_runs
-):
-    """
-    Runs the learner algorithms a number of times and averages the episodic rewards
-    from all runs for each episode
+        :param      use_lambda      Indicates whether to run SARSA or SARSA(λ)
+        :param      num_episodes    Number of episodes in each performance trial
+        :param      num_trials      Number of trials to run, each with many episodes
 
-    Input: num_runs: the number of times to run the learner
-           algorithm: the algorithm to use ("sarsa" or "sarsa_lambda")
+        :returns    List of averaged rewards per episode over all the trials
+                    Policy learned by the agent during the last trial
+        """
+        sum_rewards: list[float] = []  # Per-episode rewards summed across trials
 
-    Output:
-        episode_rewards: a list of averaged rewards per episode over a num_runs number of times
-        learned_policy: the policy learned by the last run of the learner
-    """
-    episode_rewards = []
-    for _ in range(num_runs):
-        env.reset()
-        learner = Learner(alpha, gamma, epsilon, lambda_value, game)
-        if algorithm == "sarsa":
-            learned_policy, q_values, single_run_er = learner.learn_policy_sarsa(
-                env, num_episodes
-            )
-        elif algorithm == "sarsa_lambda":
-            learned_policy, q_values, single_run_er = learner.learn_policy_sarsa_lambda(
-                env, num_episodes
-            )
+        for _ in range(num_trials):
+            self.env.reset()
+            self.agent.reset()
 
-        if not episode_rewards:
-            episode_rewards = single_run_er
-        else:
-            episode_rewards = [
-                episode_rewards[i] + single_run_er[i] for i in range(len(single_run_er))
-            ]
+            policy, q_values, episode_rewards = (
+                self.agent.sarsa_lambda(self.env, num_episodes)
+                if use_lambda
+                else self.agent.sarsa(self.env, num_episodes)
+            )  # TODO: Verify return types of these methods!
 
-    episode_rewards = [er / num_runs for er in episode_rewards]
-    return episode_rewards, learned_policy
+            if not sum_rewards:
+                sum_rewards = episode_rewards
+            else:
+                sum_rewards = [sum(pair) for pair in zip(sum_rewards, episode_rewards)]
+
+        average_rewards = [total / num_trials for total in sum_rewards]
+
+        return average_rewards, policy

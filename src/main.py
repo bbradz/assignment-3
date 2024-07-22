@@ -2,7 +2,7 @@
 
 
 def main():
-    """Define hyperparameters and test either the SARSA or SARSA-λ implementation."""
+    """Define hyperparameters and test either the SARSA or SARSA(λ) algorithm."""
 
     game = "Taxi-v3"  # CartPole-v0 or Taxi-v3
     alpha = 0.2
@@ -11,6 +11,8 @@ def main():
     lambda_value = 0.9
     num_episodes = 1500
     num_runs = 10
+
+    learner = Learner(alpha, gamma, epsilon, lambda_value, game)
 
     ### Run SARSA Algorithm [uncomment the 3 lines below for testing]
     # episode_rewards_1, learned_policy = avg_episode_rewards(game, "sarsa", alpha, gamma, epsilon, lambda_value, num_episodes, num_runs)
