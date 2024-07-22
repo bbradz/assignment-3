@@ -1,0 +1,6 @@
+name: assignment2
+dependencies:
+  - pytest
+  - numpy
+  - gymnasium
+  - matplotlib
