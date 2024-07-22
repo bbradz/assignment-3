@@ -1,5 +1,9 @@
 """This script defines the main function for the assignment."""
 
+from .learner import Learner
+from .runner import EnvRunner
+from .visualization import plot_rewards, render_visualization
+
 
 def main():
     """Define hyperparameters and test either the SARSA or SARSA(λ) algorithm."""
@@ -8,21 +12,23 @@ def main():
     alpha = 0.2
     gamma = 0.9
     epsilon = 0.25
-    lambda_value = 0.9
-    num_episodes = 1500
-    num_runs = 10
+    lambda_ = 0.9
 
-    learner = Learner(alpha, gamma, epsilon, lambda_value, game)
+    n_episodes = 1500
+    n_runs = 10
 
-    ### Run SARSA Algorithm [uncomment the 3 lines below for testing]
-    # episode_rewards_1, learned_policy = avg_episode_rewards(game, "sarsa", alpha, gamma, epsilon, lambda_value, num_episodes, num_runs)
-    # plot_rewards(episode_rewards_1, game, algorithm="sarsa")
-    # render_visualization(learned_policy, game, model="sarsa", algorithm="sarsa")
+    agent = Learner(alpha, gamma, epsilon, lambda_, game)
+    runner = EnvRunner(game, agent)
 
-    ### Run SARSA-λ Algorithm [uncomment the 3 lines below for testing]
-    # episode_rewards_2, learned_policy = avg_episode_rewards(game, "sarsa_lambda", alpha, gamma, epsilon, lambda_value, num_episodes, num_runs)
-    # plot_rewards(episode_rewards_2, game, algorithm="sarsa_lambda")
-    # render_visualization(learned_policy, game, model="sarsa_lambda", algorithm="sarsa_lambda")
+    ### Run the SARSA algorithm [uncomment the 3 lines below for testing]
+    rewards1, policy1 = runner.average_over_trials(False, n_episodes, n_runs)
+    plot_rewards(rewards1, game, algorithm="SARSA")
+    render_visualization(policy1, game, algorithm="SARSA")
+
+    ### Run the SARSA(λ) algorithm [uncomment the 3 lines below for testing]
+    rewards2, policy2 = runner.average_over_trials(True, n_episodes, n_runs)
+    plot_rewards(rewards2, game, algorithm="SARSA-Lambda")
+    render_visualization(policy2, game, algorithm="SARSA-Lambda")
 
 
 if __name__ == "__main__":
