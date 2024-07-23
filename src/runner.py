@@ -2,7 +2,7 @@
 
 import gymnasium as gym
 
-from .learner import Learner
+from learner import Learner
 
 
 class EnvRunner:
@@ -34,7 +34,7 @@ class EnvRunner:
 
         for _ in range(num_trials):
             self.env.reset()
-            self.agent.reset()
+            #self.agent.reset()
 
             policy, q_values, episode_rewards = (
                 self.agent.sarsa_lambda(self.env, num_episodes)
@@ -45,7 +45,7 @@ class EnvRunner:
             if not sum_rewards:
                 sum_rewards = episode_rewards
             else:
-                sum_rewards = [sum(pair) for pair in zip(sum_rewards, episode_rewards)]
+                sum_rewards = [sum_rewards[i] + episode_rewards[i] for i in range(len(episode_rewards))]
 
         average_rewards = [total / num_trials for total in sum_rewards]
 

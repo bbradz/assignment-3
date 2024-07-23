@@ -24,7 +24,7 @@ def discretize_state(state) -> int:
     ]
 
     bin_indices = []
-    bins_per_variable = [4, 5, 5, 5]  # 4 * 5 * 5 * 5 = 500 bins total
+    bins_per_variable = [6, 5, 5, 5]  # 6 * 5 * 5 * 5 = 500 bins total
 
     for value, (low, high), bins in zip(state, state_ranges, bins_per_variable):
         clipped_value = np.clip(value, low, high)

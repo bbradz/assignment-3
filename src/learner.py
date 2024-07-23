@@ -2,7 +2,7 @@
 
 import numpy as np
 import gymnasium as gym
-
+from discretize import discretize_state
 
 class Learner:
     """A learning-based agent implementing the SARSA and SARSA(λ) algorithms."""
@@ -27,7 +27,7 @@ class Learner:
         self.game = game
 
         if game == "CartPole-v0":
-            self.num_states = 500
+            self.num_states = 750
             self.num_actions = 2
         elif game == "Taxi-v3":
             self.num_states = 500
@@ -46,9 +46,7 @@ class Learner:
         self.rng = np.random.default_rng()
 
         # Q-table - |S| x |A| array representing state-action values
-        self.q_table = self.rng.uniform(
-            low=-1.0, high=1.0, size=(self.num_states, self.num_actions)
-        )
+        self.q_table = np.zeros((self.num_states, self.num_actions))
 
         # Policy - |S| x 1 vector representing the chosen action in each state
         self.policy = self.rng.integers(self.num_actions, size=self.num_states)
@@ -82,55 +80,58 @@ class Learner:
 
     def sarsa(self, env: gym.Env, num_episodes: int):
         """FILL IN"""
-
         # rewards_each_learning_episode = []
 
-        # for ### FILL IN ###
+        # for _ in #### FILL IN ####
 
-        # episodic_reward = 0
-        # done = False
+            # state, info = env.reset()
 
-        # while ### FILL IN ###:
+            #### FILL IN ####
+            
+            # episodic_reward = 0
+            # done = False
 
-        ### FILL IN ###
+            # while not #### FILL IN ####
 
-        # episodic_reward += reward
+                #### FILL IN ####
+                # episodic_reward += reward
 
-        ### FILL IN ###
+                #### FILL IN ####
 
-        # if done:
-        #    break
+        #         if done:
+        #             break
 
-        # rewards_each_learning_episode.append(episodic_reward)
+        #     rewards_each_learning_episode.append(episodic_reward)
 
         # np.save(f"results/{self.game}/sarsa/qvalues", self.q_table)
         # np.save(f"results/{self.game}/sarsa/policy", self.policy)
         # return self.policy, self.q_table, rewards_each_learning_episode
 
+
     def sarsa_lambda(self, env: gym.Env, num_episodes: int):
         """FILL IN"""
-
         # rewards_each_learning_episode = []
 
-        # for ### FILL IN ###
+        # for _ in #### FILL IN ####
 
-        # episodic_reward = 0
-        # done = False
+            # episodic_reward = 0
+            # done = False
+            # state, info = env.reset()
 
-        ### FILL IN ###
+            #### FILL IN ####
 
-        # while ### FILL IN ###
+            # while not #### FILL IN ####:
 
-        ### FILL IN ###
+                #### FILL IN ####
 
-        # episodic_reward += reward
+                # episodic_reward += reward
 
-        ### FILL IN ###
+                #### FILL IN ####
 
-        # if done: break
+        #         if done: break 
 
-        # rewards_each_learning_episode.append(episodic_reward)
+        #     rewards_each_learning_episode.append(episodic_reward)
 
-        # np.save(f"results/{self.game}/sarsa_lambda/qvalues", self.q_table)
-        # np.save(f"results/{self.game}/sarsa_lambda/policy", self.policy)
+        # np.save(f"results/{self.game}/SARSA-Lambda/qvalues", self.q_table)
+        # np.save(f"results/{self.game}/SARSA-Lambda/policy", self.policy)
         # return self.policy, self.q_table, rewards_each_learning_episode

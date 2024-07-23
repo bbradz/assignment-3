@@ -5,7 +5,7 @@ import gymnasium as gym
 from gymnasium.wrappers import RecordVideo
 import matplotlib.pyplot as plt
 
-from .discretize import discretize_state
+from discretize import discretize_state
 
 
 def plot_rewards(episode_rewards: list[float], env_name: str, algorithm: str):
@@ -35,13 +35,15 @@ def render_visualization(learned_policy: np.ndarray, env_name: str, algorithm: s
     env = gym.make(env_name, render_mode="rgb_array")
     env = RecordVideo(env, output_path)
 
-    state_idx = discretize_state(env.reset())
+    state, _ = env.reset()
+    state_idx = discretize_state(state)
     env.render()
     while True:
-        action = learned_policy[state_idx, 0]
-        next_state, reward, done, _, _ = env.step(action)
+        action = learned_policy[state_idx]
+        next_state, reward, done, truncated, _ = env.step(action)
+        state_idx = discretize_state(next_state)
         env.render()
         print(f"Took action: {action} Reward: {reward}")
-        state_idx = discretize_state(next_state)
+        state = next_state
         if done:
             break
