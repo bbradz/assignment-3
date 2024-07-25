@@ -103,8 +103,8 @@ class Learner:
 
         #     rewards_each_learning_episode.append(episodic_reward)
 
-        # np.save(f"results/{self.game}/sarsa/qvalues", self.q_table)
-        # np.save(f"results/{self.game}/sarsa/policy", self.policy)
+        # np.save(f"results/{self.game}/SARSA/qvalues", self.q_table)
+        # np.save(f"results/{self.game}/SARSA/policy", self.policy)
         # return self.policy, self.q_table, rewards_each_learning_episode
 
 
